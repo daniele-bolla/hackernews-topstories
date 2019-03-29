@@ -4,6 +4,7 @@
   "description": "Simple Hackernews Clone ( Vanillajs )",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm start",
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
     "test": "jest"
@@ -19,6 +20,7 @@
   },
   "homepage": "https://gitlab.com/daniele-bolla/anddigitaltest#readme",
   "devDependencies": {
+    "@babel/core": "^7.4.0",
     "babel-preset-env": "^1.7.0",
     "jest": "^24.5.0",
     "parcel-bundler": "^1.12.3"
