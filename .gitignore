@@ -1,0 +1,9 @@
+#Vs Code
+.settings
+.vscode
+.cache
+#Npm
+node_modules
+.npm
+#Production
+dist
