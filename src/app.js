@@ -47,7 +47,7 @@ const main = () => {
 		obj.start = obj.start + obj.articles.length
 		yield obj;
 	}
-	const consumer = async () => {
+	const articlesConsumer = async () => {
 		const articlesStream = articlesStreamer(context.topStories, context.articles.length);
 		const { value: { articles } } = await articlesStream.next()
 		context.articles = [...context.articles, ...articles]
@@ -70,7 +70,7 @@ const main = () => {
 	const handleScrollIntersection = (entries, observerObj) => {
 		const { isIntersecting } = entries[0];
 		if (isIntersecting) {
-			consumer()
+			articlesConsumer()
 		} else {
 			return
 		}
@@ -81,8 +81,11 @@ const main = () => {
 	/**Streaming ....*/
 	fetchAsyncA(topStoriesApi).then((data) => {
 		context.topStories = data;
-		consumer();
+		articlesConsumer();
+		/*const urls = data.map(id => `${baseApi}/item/${id}.json?print=pretty`)
+		Promise.all(urls.map(fetchAsyncA)).then(console.log).catch(console.log)*/
 	})
+
 
 }
 document.addEventListener('DOMContentLoaded', main())
