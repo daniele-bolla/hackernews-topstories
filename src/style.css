@@ -1,3 +1,18 @@
 body{
-	background: #222;
+	background: #ddd;
+}
+.wrap{
+	margin-top: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.article{
+	margin-bottom: 15px;
+	min-height: 100px;
+}
+.sentinel {
+  width: 100%;
+  height: 100px;
 }

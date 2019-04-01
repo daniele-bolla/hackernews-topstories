@@ -24,5 +24,9 @@
     "babel-preset-env": "^1.7.0",
     "jest": "^24.5.0",
     "parcel-bundler": "^1.12.3"
+  },
+  "dependencies": {
+    "css-reset-and-normalize": "^2.0.1",
+    "style.css": "^1.0.0"
   }
 }
