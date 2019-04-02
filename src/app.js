@@ -21,9 +21,13 @@ const sliceBy = (list, start, end) => list.slice(start, end)
 
 /**Templates */
 const useArticleTemplate = (url, title) => (`
-<a target="_blank" href="${url}">
-	<h2><a>${title}</a></h2>
-</article>
+	<h2><a target="_blank" onclick="event.stopPropagation()" href="${url}">${title}</a></h2>
+	<button>Load Comment</button>
+`)
+const useCommentsTemplate = (text, by) => (`
+	<h3>${by}</h3>
+	<hr/>
+	<p>${text}</p>
 `)
 
 /**Api */
@@ -32,33 +36,50 @@ const topStoriesApi = `${baseApi}/topstories.json?print=pretty`
 
 /**App */
 const main = () => {
+
 	const context = {
 		topStories: [],
 		articles: []
 	}
 	const $wrap = selectEl('.wrap')
 	const $sentinel = createNodeFromTemplate(null, 'div', { 'class': 'sentinel' })
+	$wrap.addEventListener('click',(event) => {
+		const currentComponent = event.target.parentNode
+		const kids = currentComponent.getAttribute("kids").split(',')
+		const id = currentComponent.getAttribute("id")
+		commentsConsumer(kids, 0, currentComponent)
+
+	})
 
 	/**Streamers and Consumers*/
-	async function* articlesStreamer(data, start = 0) {
+	async function* articlesStreamer(ids, start = 0) {
 		let obj = { articles: [], start: start }
-		const urls = sliceBy(data, obj.start, obj.start + 10).map(id => `${baseApi}/item/${id}.json?print=pretty`)
+		const urls = sliceBy(ids, obj.start, obj.start + 10).map(id => `${baseApi}/item/${id}.json?print=pretty`)
 		obj.articles = await Promise.all((await urls.map(fetchAsyncA)))
 		obj.start = obj.start + obj.articles.length
 		yield obj;
 	}
 	const articlesConsumer = async () => {
-		const articlesStream = articlesStreamer(context.topStories, context.articles.length);
+		const articlesStream = articlesStreamer(context.topStories, context.articles.length)
 		const { value: { articles } } = await articlesStream.next()
 		context.articles = [...context.articles, ...articles]
-		console.log(context)
-		articles.forEach(({ url, title, id }) => {
+		articles.forEach(({ url, title, id, kids}) => {
 			const template = useArticleTemplate(url, title)
-			const attrs = { 'class': `article article-${id}` }
+			const attrs = { 'class': `article article-${id}`, kids, id }
 			const node = createNodeFromTemplate(template, 'article', attrs)
 			$wrap.insertAdjacentElement('beforeend', node)
 		})
 		$wrap.appendChild($sentinel)
+	}
+	const commentsConsumer = async (ids, length, currentComponent) => {
+		const commentsStream = articlesStreamer(ids, length)
+		const { value: { articles } } = await commentsStream.next()
+		articles.forEach(({id, text, by}) => {
+			const template = useCommentsTemplate(text, by)
+			const attrs = { 'class': `comment comment-${id}`, id }
+			const node = createNodeFromTemplate(template, 'div', attrs)
+			currentComponent.insertAdjacentElement('beforeend', node)
+		})
 	}
 
 	/**Intersection Observer */
@@ -79,13 +100,12 @@ const main = () => {
 	scrollObserver.observe($sentinel);
 
 	/**Streaming ....*/
-	fetchAsyncA(topStoriesApi).then((data) => {
-		context.topStories = data;
+	fetchAsyncA(topStoriesApi).then((topStories) => {
+		context.topStories = topStories;
 		articlesConsumer();
-		/*const urls = data.map(id => `${baseApi}/item/${id}.json?print=pretty`)
+		/*const urls = topStories.map(id => `${baseApi}/item/${id}.json?print=pretty`)
 		Promise.all(urls.map(fetchAsyncA)).then(console.log).catch(console.log)*/
 	})
-
 
 }
 document.addEventListener('DOMContentLoaded', main())
