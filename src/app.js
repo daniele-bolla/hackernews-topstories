@@ -1,6 +1,5 @@
 import 'css-reset-and-normalize'
 import './style.css'
-import { functionTypeAnnotation } from '@babel/types';
 /**Dom */
 const selectEl = (selector, parent = document) => parent.querySelector(selector)
 const createNodeFromTemplate = (template, wrapper, wrapperAttrs) => {
@@ -8,8 +7,8 @@ const createNodeFromTemplate = (template, wrapper, wrapperAttrs) => {
 	for (const [key, value] of Object.entries(wrapperAttrs)) {
 		node.setAttribute(key, value)
 	}
-	node.innerHTML = template;
-	return node;
+	node.innerHTML = template
+	return node
 }
 /**Utils */
 const fetchAsyncA = async (url) => await (await fetch(url)).json()
@@ -20,7 +19,7 @@ const useArticleTemplate = (url, title) => (`
 	<button class="btn-comments-loader">load comments</button>
 `)
 const useCommentsTemplate = (text, by) => (`
-	<h3>&raquo; by: <strong>${by}</strong></h3>
+	<h3>&raquo by: <strong>${by}</strong></h3>
 	<p>${text}</p>
 `)
 /**Api */
@@ -37,7 +36,7 @@ const main = () => {
 	const renderArticles = (articles) => {
 		const articlesWithFLow = articles.map(article => {
 			article.flow = coroutine(hackerNewsStreamer, article.kids, 2)
-			return article;
+			return article
 		})
 		context.articles = [...context.articles, ...articlesWithFLow]
 		articles.forEach(({ url, title, id, kids}) => {
@@ -60,11 +59,11 @@ const main = () => {
 	}
 	/**Streamer and Consumer*/
 	async function* hackerNewsStreamer(ids, slice) {
-		let start = 0;
+		let start = 0
 		while(start <= ids.length){
 			let urls = sliceBy(ids, start, start + slice).map(id => `${baseApi}/item/${id}.json?print=pretty`)
-			yield await Promise.all(urls.map(fetchAsyncA));
-			start += slice;
+			yield await Promise.all(urls.map(fetchAsyncA))
+			start += slice
 		}
 	}
 	const hackerNewsConsumer = async(flow, cbk, ...params)=>{
@@ -79,7 +78,6 @@ const main = () => {
 	}
 	/**Streaming ....*/
 	fetchAsyncA(topStoriesApi).then((topStories) => {
-		/** move this code todo*/
 		context.topStories = topStories
 		const flow = coroutine(hackerNewsStreamer,topStories, 2)
 		hackerNewsConsumer(flow, renderArticles)
@@ -90,15 +88,15 @@ const main = () => {
 			threshold: 0.25
 		}
 		const handleScrollIntersection = (entries, observerObj) => {
-			const { isIntersecting } = entries[0];
+			const { isIntersecting } = entries[0]
 			if (isIntersecting) {
 				hackerNewsConsumer(flow, renderArticles)
 			} else {
 				return
 			}
 		}
-		const scrollObserver = new IntersectionObserver(handleScrollIntersection, scrollObserverOptions);
-		scrollObserver.observe($sentinel);
+		const scrollObserver = new IntersectionObserver(handleScrollIntersection, scrollObserverOptions)
+		scrollObserver.observe($sentinel)
 		/**Load Comments with Click */
 		$wrap.addEventListener('click',(event) => {
 			const currentComponent = event.target.parentNode
@@ -106,7 +104,6 @@ const main = () => {
 			const currentArticle = context.articles.find(item => id == id)
 			hackerNewsConsumer(currentArticle.flow, renderComments, currentComponent)
 		})
-		/*end todo*/
 	})
 }
 document.addEventListener('DOMContentLoaded', main())
