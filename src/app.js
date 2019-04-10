@@ -13,7 +13,7 @@ const createNodeFromTemplate = (template, wrapper, wrapperAttrs) => {
 /**Utils */
 const fetchAsyncA = async (url) => await (await fetch(url)).json()
 const sliceBy = (list, start, end) => list.slice(start, end)
-const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);
+const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x)
 /**Templates */
 const useArticleTemplate = (url, title) => (`
 	<h2><a target="_blank" href="${url}">${title}</a></h2>
@@ -37,24 +37,24 @@ const updateContext = (position, newState) => {
 /**Streamer and Consumer*/
 async function* hackerNewsStreamer(ids, slice) {
 	let start = 0
-	while(start <= ids.length){
+	while (start <= ids.length) {
 		let urls = sliceBy(ids, start, start + slice).map(id => `${baseApi}/item/${id}.json?print=pretty`)
 		yield await Promise.all(urls.map(fetchAsyncA))
 		start += slice
 	}
 }
-const hackerNewsConsumer = async(flow, cbk, ...params)=>{
-	const {value:articles, done} = await flow()
-	if(articles && articles.length){
+const hackerNewsConsumer = async (flow, cbk, ...params) => {
+	const { value: articles, done } = await flow()
+	if (articles && articles.length) {
 		cbk(articles, ...params)
 	} else {
-	flow = null
+		flow = null
 	}
 }
-const createFlow = (generator, ...params)=>{
+const createFlow = (generator, ...params) => {
 	const iterator = generator(...params)
-	return function(){
-		return iterator.next.apply(iterator,arguments)
+	return function () {
+		return iterator.next.apply(iterator, arguments)
 	}
 }
 /**Intersection Observer */
@@ -76,9 +76,9 @@ const initIntersectionObserver = (elementToObserve, cbk, ...params) => {
 	scrollObserver.observe(elementToObserve)
 }
 /**Load Comments with Click */
-function initLoadCommentsClicks(wrapper){
-	wrapper.addEventListener('click',(event) => {
-		if(event.target.className != 'btn-comments-loader') return;
+function initLoadCommentsClicks(wrapper) {
+	wrapper.addEventListener('click', (event) => {
+		if (event.target.className != 'btn-comments-loader') return
 		const currentComponent = event.target.parentNode
 		const id = currentComponent.getAttribute("id")
 		const currentArticle = context.articles.find(item => id == id)
@@ -96,7 +96,7 @@ const main = () => {
 			return article
 		})
 		updateContext('articles', articlesWithFLow)
-		articles.forEach(({ url, title, id, kids}) => {
+		articles.forEach(({ url, title, id, kids }) => {
 			const template = useArticleTemplate(url, title)
 			const attrs = { 'class': `article`, id }
 			const node = createNodeFromTemplate(template, 'article', attrs)
@@ -105,7 +105,7 @@ const main = () => {
 		$wrap.appendChild($sentinel)
 	}
 	const renderComments = (comments, currentComponent) => {
-		comments.forEach(({id, text, by}) => {
+		comments.forEach(({ id, text, by }) => {
 			const template = useCommentsTemplate(text, by)
 			const attrs = { 'class': `comment`, id }
 			const node = createNodeFromTemplate(template, 'div', attrs)
@@ -116,7 +116,7 @@ const main = () => {
 	/**Streaming -- Events and Hooks ....*/
 	fetchAsyncA(topStoriesApi).then((topStories) => {
 		updateContext('topStories', topStories)
-		const flow = createFlow(hackerNewsStreamer,topStories, 2)
+		const flow = createFlow(hackerNewsStreamer, topStories, 2)
 		hackerNewsConsumer(flow, saveAndRenderArticles)
 		initIntersectionObserver($sentinel, hackerNewsConsumer, flow, saveAndRenderArticles)
 		initLoadCommentsClicks($wrap)
