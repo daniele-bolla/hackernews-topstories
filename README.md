@@ -3,15 +3,21 @@
 Simple Hackernews Clone 
 
 ## Run The Project
-I've used [Parcel](https://parceljs.org/) for setting up the build system quickly run :
+I've used [Parcel](https://parceljs.org/) for setting up the build system quickly 
+Dev Server:
 
 ```
 npm start
 ```
-to serve the default dev environment
+Prod:
+
+```
+npm build -- --public-url "$path"
+```
+[Jest](https://jestjs.io/) testing:
 
 ```
 npm test
 ```
-to start [Jest](https://jestjs.io/) testing
+
 
