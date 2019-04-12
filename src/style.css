@@ -1,16 +1,16 @@
 /* Variables */
 :root {
-  --body-bg: #FCF6F1; 
-  --primary: #FFA555; 
-	--text-dark: #2A363B; 
-	--text-light: #eee; 
+  --body-bg: #fcf6f1;
+  --primary: #ffa555;
+  --text-dark: #2a363b;
+  --text-light: #eee;
 }
 /* Typo */
 html {
-  font-family: "Ubuntu";
+  font-family: 'Ubuntu';
   font-size: 137.5%;
-	-webkit-font-smoothing: antialiased;
-	color: var(--text-dark)
+  -webkit-font-smoothing: antialiased;
+  color: var(--text-dark);
 }
 p {
   line-height: 1.5rem;
@@ -36,19 +36,19 @@ h3 {
 h1 {
   font-size: 4.242rem;
   line-height: 4.5rem;
-	margin-top: 3rem;
-	color: var(--primary);
-	text-align: center;
+  margin-top: 3rem;
+  color: var(--primary);
+  text-align: center;
 }
 h2 {
-  font-family: "Droid Serif";
+  font-family: 'Droid Serif';
   font-size: 1.414rem;
   line-height: 1.5rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 h3 {
-	font-size: 0.4713333333333333rem;
+  font-size: 0.4713333333333333rem;
 }
 a {
   color: var(--text-dark);
@@ -67,20 +67,19 @@ body {
   flex-direction: column;
   justify-content: center;
 }
-header{
-	padding: 1rem;
+header {
+  padding: 1rem;
 }
 .article {
   margin-bottom: 1rem;
-	min-height: 20vh;
-	padding-left: 1rem;
-	border-left:0.2rem solid var(--primary);
-
+  min-height: 20vh;
+  padding-left: 1rem;
+  border-left: 0.2rem solid var(--primary);
 }
 .comment {
-	padding: 1rem;
-	margin-bottom: 1rem;
-	border: dotted 0.06rem var(--text-dark)
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: dotted 0.06rem var(--text-dark);
 }
 .sentinel {
   width: 0;
@@ -88,13 +87,13 @@ header{
 }
 .btn-comments-loader {
   background: var(--primary);
-	border: none;
+  border: none;
   padding: 0.6rem 1rem;
-	text-align: center;
-	color: var(--text-light);
-	font-size: 0.4713333333333333rem;
-	font-weight: bold;
-	float: right;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.4713333333333333rem;
+  font-weight: bold;
+  float: right;
   text-decoration: none;
   display: inline-block;
   cursor: pointer;

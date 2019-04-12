@@ -1,6 +1,6 @@
-# And Digital Project Test
+# Hackernews Top Stories
 
-Simple Hackernews Clone 
+with async generators ans vanilla js
 
 ## Run The Project
 I've used [Parcel](https://parceljs.org/) for setting up the build system quickly 
