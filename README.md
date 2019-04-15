@@ -1,6 +1,6 @@
 # Hackernews Top Stories
 
-with async generators ans vanilla js
+vanilla js and async generators
 
 ## Run The Project
 I've used [Parcel](https://parceljs.org/) for setting up the build system quickly 

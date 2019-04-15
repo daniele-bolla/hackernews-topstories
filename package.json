@@ -1,7 +1,7 @@
 {
-  "name": "anddigitaltest",
+  "name": "Hackernews",
   "version": "1.0.0",
-  "description": "Simple Hackernews Clone ( Vanillajs )",
+  "description": "Hackernews Top Stories ( Vanillajs Async Generators )",
   "main": "index.js",
   "scripts": {
     "postinstall": "npm start",
@@ -20,7 +20,8 @@
   },
   "homepage": "https://gitlab.com/daniele-bolla/anddigitaltest#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.0",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.4.3",
     "babel-preset-env": "^1.7.0",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.5.0",
